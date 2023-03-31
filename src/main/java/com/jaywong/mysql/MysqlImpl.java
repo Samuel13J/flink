@@ -1,4 +1,4 @@
-package com.jaywong.flink;
+package com.jaywong.mysql;
 
 /**
  * @author wangjie
@@ -6,6 +6,7 @@ package com.jaywong.flink;
  */
 
 import akka.japi.tuple.Tuple4;
+import com.jaywong.util.PropertiesUtils;
 import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class MysqlImpl extends RichSinkFunction<Tuple4<String, Integer, String, 
 /**
  *     PropertiesUtils instance = PropertiesUtils.getInstance();
  *     出现了以下报错 包含有不可序列化文件，需要用 private static final 修饰
- *     com.jaywong.flink.PropertiesUtils@3e2fc448 is not serializable.
+ *     com.jaywong.util.PropertiesUtils@3e2fc448 is not serializable.
  *     The object probably contains or references non serializable fields.
  */
     private static final PropertiesUtils instance = PropertiesUtils.getInstance();

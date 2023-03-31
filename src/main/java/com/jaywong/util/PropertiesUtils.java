@@ -1,4 +1,4 @@
-package com.jaywong.flink;
+package com.jaywong.util;
 
 import java.io.IOException;
 import java.io.InputStream;
