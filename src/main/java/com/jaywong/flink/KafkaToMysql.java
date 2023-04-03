@@ -63,7 +63,7 @@ public class KafkaToMysql implements Serializable {
         envs.getCheckpointConfig().setMaxConcurrentCheckpoints(instance.getFlinkCheckpointMaxConcurrentCheckpoint());
 //        表示一旦flink处理程序被cancel后，会保留checkpoint数据，以便根据实际需要恢复到指定的checkpoint
         envs.getCheckpointConfig().enableExternalizedCheckpoints(CheckpointConfig.ExternalizedCheckpointCleanup.DELETE_ON_CANCELLATION);
-        envs.setParallelism(1);
+        envs.setParallelism(instance.getFlinkKafkaSourceParallelism());
 
 //        flink table
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().useBlinkPlanner().build();

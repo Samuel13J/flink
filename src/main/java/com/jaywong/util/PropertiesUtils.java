@@ -19,6 +19,7 @@ public class PropertiesUtils {
     private Integer flinkCheckpointMaxConcurrentCheckpoint = null;
     private Integer flinkFixedDelayRestartTimes = null;
     private Integer flinkFixedDelayRestartInterval = null;
+    private Integer flinkKafkaSourceParallelism = null;
     private String kafkaTopic = null;
     private String groupID = null;
     private String kafkaBootStrapServers = null;
@@ -52,6 +53,7 @@ public class PropertiesUtils {
             flinkCheckpointMaxConcurrentCheckpoint = Integer.parseInt(prop.getProperty("flink.checkpoint.maxConcurrentCheckpoint"));
             flinkFixedDelayRestartTimes = Integer.parseInt(prop.getProperty("flink.fixedDelayRestart.times"));
             flinkFixedDelayRestartInterval = Integer.parseInt(prop.getProperty("flink.fixedDelayRestart.interval"));
+            flinkKafkaSourceParallelism = Integer.parseInt(prop.getProperty("flink.kafka.source.parallelism"));
 //            kafka配置
             kafkaTopic = prop.getProperty("kafka.topic");
             kafkaBootStrapServers = prop.getProperty("kafka.consumer.bootstrap.servers").trim();
@@ -145,5 +147,8 @@ public class PropertiesUtils {
     }
     public Integer getFlinkFixedDelayRestartInterval() {
         return flinkFixedDelayRestartInterval;
+    }
+    public Integer getFlinkKafkaSourceParallelism() {
+        return flinkKafkaSourceParallelism;
     }
 }
