@@ -1,5 +1,5 @@
 package com.jaywong.flink;
-
+//com.jaywong.flink.KafkaToMysql
 import akka.japi.tuple.Tuple4;
 import com.jaywong.mysql.MysqlImpl;
 import com.jaywong.util.PropertiesUtils;
@@ -17,7 +17,7 @@ import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-
+import akka.japi.tuple.Tuple7;
 import java.io.Serializable;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -74,14 +74,15 @@ public class KafkaToMysql implements Serializable {
                 , kafkaConf));
         mykafka.print();
 
-        DataStream<akka.japi.tuple.Tuple4<String, Integer, String, String>> stream = mykafka.map(new MapFunction<String, akka.japi.tuple.Tuple4<String,
-                Integer, String, String>>() {
+        DataStream<akka.japi.tuple.Tuple7<String, Integer, String, String, Double, Double, String>> stream = mykafka.map(new MapFunction<String,
+                akka.japi.tuple.Tuple7<String,
+                Integer, String, String, Double, Double, String>>() {
             private static final long serialVersionUID = 1L;
             @Override
-            public akka.japi.tuple.Tuple4<String, Integer, String, String> map(String value) throws Exception {
+            public akka.japi.tuple.Tuple7<String, Integer, String, String, Double, Double, String> map(String value) throws Exception {
                 String[] strings = value.split(",");
-                return new Tuple4<String, Integer, String, String>(strings[0],Integer.parseInt(strings[1]),strings[2],
-                        strings[3]);
+                return new Tuple7<String, Integer, String, String, Double, Double, String>(strings[0],Integer.parseInt(strings[1]),strings[2],
+                        strings[3], Double.parseDouble(strings[4]), Double.parseDouble(strings[5]), strings[6]);
             }
         });
         stream.addSink(new MysqlImpl());

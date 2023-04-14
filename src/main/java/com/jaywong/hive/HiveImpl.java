@@ -1,5 +1,6 @@
 package com.jaywong.hive;
 
+import com.jaywong.util.PropertiesUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -10,9 +11,12 @@ import org.apache.flink.table.api.SqlDialect;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.catalog.hive.HiveCatalog;
+import org.apache.hadoop.hive.metastore.api.Database;
+import org.apache.tools.ant.taskdefs.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.apache.flink.table.descriptors.TableDescriptor;
+import java.lang.reflect.Array;
 import java.time.Duration;
 
 /**
@@ -22,6 +26,8 @@ import java.time.Duration;
 public class HiveImpl {
     private final static Logger logger = LoggerFactory.getLogger(HiveImpl.class);
     public static void main(String[] args) throws Exception {
+//        读取配置
+        PropertiesUtils instance = PropertiesUtils.getInstance();
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
@@ -36,13 +42,17 @@ public class HiveImpl {
                 Duration.ofSeconds(20));
 
         HiveCatalog catalog = new HiveCatalog(
-                "myhive",
-                "db_test_tmp",
-                "/usr/local/service/hive/conf"
+                instance.getCatalogName(),
+                instance.getHiveDatabase(),
+                instance.getHiveConfDir()
         );
-        tableEnv.registerCatalog("myhive", catalog);
-        tableEnv.useCatalog("myhive");
-
+//        tableEnv.registerCatalog("default_catalog", catalog);
+        tableEnv.useCatalog(instance.getCatalogName());
+        String[] strings = tableEnv.listCatalogs();
+        tableEnv.executeSql("CREATE CATALOG myhive WITH ('type' = 'hive', 'default-database' = 'myhive', 'hive-conf-dir' = 'D:\\CodeEnv\\BigData\\apache-hive-2.1.1-bin\\conf') ");
+        for (int i=0;i <= 10; i++) {
+            System.out.println(strings[i]);
+        }
 
         tableEnv.executeSql("DROP TABLE IF EXISTS db_test_tmp.test_kafka_source");
         tableEnv.executeSql("CREATE TABLE db_test_tmp.test_kafka_source (\n" +

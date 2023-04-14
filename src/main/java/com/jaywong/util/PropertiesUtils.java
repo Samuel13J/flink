@@ -34,7 +34,9 @@ public class PropertiesUtils {
     private String mysqlPassword = null;
     private String mysqlDriverName = null;
     private String mysqldbURL = null;
-
+    private String hiveDatabase = null;
+    private String hiveConfDir = null;
+    private String catalogName = null;
 
     /**
      * 静态代码块
@@ -46,7 +48,7 @@ public class PropertiesUtils {
             in = PropertiesUtils.class.getClassLoader().getResourceAsStream("constance.properties");
             Properties prop = new Properties();
             prop.load(in);
-//            flink配置
+//            flink 配置
             flinkCheckpointInterval = Integer.parseInt(prop.getProperty("flink.checkpoint.interval"));
             flinkCheckpointMinPauseBetweenCheckpoints = prop.getProperty("flink.checkpoint.minPauseBetweenCheckpoints");
             flinkCheckpointCheckpointTimeout = Integer.parseInt(prop.getProperty("flink.checkpoint.checkpointTimeout"));
@@ -54,7 +56,7 @@ public class PropertiesUtils {
             flinkFixedDelayRestartTimes = Integer.parseInt(prop.getProperty("flink.fixedDelayRestart.times"));
             flinkFixedDelayRestartInterval = Integer.parseInt(prop.getProperty("flink.fixedDelayRestart.interval"));
             flinkKafkaSourceParallelism = Integer.parseInt(prop.getProperty("flink.kafka.source.parallelism"));
-//            kafka配置
+//            kafka 配置
             kafkaTopic = prop.getProperty("kafka.topic");
             kafkaBootStrapServers = prop.getProperty("kafka.consumer.bootstrap.servers").trim();
             enableAutoCommit = Boolean.valueOf(prop.getProperty("kafka.consumer.enable.auto.commit"));
@@ -63,12 +65,18 @@ public class PropertiesUtils {
             sessionTimeoutMS = Integer.parseInt(prop.getProperty("kafka.consumer.session.timeout.ms"));
             requestTimeoutMS = Integer.parseInt(prop.getProperty("kafka.consumer.request.timeout.ms"));
             groupID = prop.getProperty("kafka.consumer.group.id").trim();
+            kafkaConsumerKeyDeserializer = prop.getProperty("kafka.consumer.key.deserializer").trim();
+            kafkaConsumerValueDeserializer = prop.getProperty("kafka.consumer.value.deserializer").trim();
+//            mysql 配置
             mysqlUserName = prop.getProperty("mysql.username").trim();
             mysqlPassword = prop.getProperty("mysql.password").trim();
             mysqldbURL = prop.getProperty("mysql.dburl").trim();
             mysqlDriverName = prop.getProperty("mysql.driver.name").trim();
-            kafkaConsumerKeyDeserializer = prop.getProperty("kafka.consumer.key.deserializer").trim();
-            kafkaConsumerValueDeserializer = prop.getProperty("kafka.consumer.value.deserializer").trim();
+//            hive 配置
+            hiveDatabase = prop.getProperty("hive.database").trim();
+            hiveConfDir = prop.getProperty("hive.hiveConf.dir").trim();
+            catalogName = prop.getProperty("hive.catalog.name").trim();
+
         } catch (Exception e) {
             throw new ExceptionInInitializerError(e);
         } finally {
@@ -150,5 +158,17 @@ public class PropertiesUtils {
     }
     public Integer getFlinkKafkaSourceParallelism() {
         return flinkKafkaSourceParallelism;
+    }
+
+    public String getHiveDatabase() {
+        return hiveDatabase;
+    }
+
+    public String getHiveConfDir() {
+        return hiveConfDir;
+    }
+
+    public String getCatalogName() {
+        return catalogName;
     }
 }
