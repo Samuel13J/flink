@@ -74,12 +74,11 @@ public class KafkaToMysql implements Serializable {
                 , kafkaConf));
         mykafka.print();
 
-        DataStream<akka.japi.tuple.Tuple7<String, Integer, String, String, Double, Double, String>> stream = mykafka.map(new MapFunction<String,
-                akka.japi.tuple.Tuple7<String,
-                Integer, String, String, Double, Double, String>>() {
+        DataStream<Tuple7<String, Integer, String, String, Double, Double, String>> stream = mykafka.map(new MapFunction<String,
+                Tuple7<String, Integer, String, String, Double, Double, String>>() {
             private static final long serialVersionUID = 1L;
             @Override
-            public akka.japi.tuple.Tuple7<String, Integer, String, String, Double, Double, String> map(String value) throws Exception {
+            public Tuple7<String, Integer, String, String, Double, Double, String> map(String value) throws Exception {
                 String[] strings = value.split(",");
                 return new Tuple7<String, Integer, String, String, Double, Double, String>(strings[0],Integer.parseInt(strings[1]),strings[2],
                         strings[3], Double.parseDouble(strings[4]), Double.parseDouble(strings[5]), strings[6]);
